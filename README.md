@@ -85,9 +85,9 @@ If you just want to use the thermostat without the alarm panel, an stl file is i
 
 ## Final Result
 ### Front
+![IMG_20220927_122309](https://user-images.githubusercontent.com/45207725/192515188-85183305-17e4-4bf2-8464-220cc6d9d71e.jpg)
 ![PXL_20220927_102025196](https://user-images.githubusercontent.com/45207725/192515153-09560e5b-a001-459a-b3b2-ef0a87bf24d6.jpg)
 ![PXL_20220927_102140844](https://user-images.githubusercontent.com/45207725/192515177-5636916c-e635-4605-b198-86ba091cd7f3.jpg)
-![IMG_20220927_122309](https://user-images.githubusercontent.com/45207725/192515188-85183305-17e4-4bf2-8464-220cc6d9d71e.jpg)
 ![PXL_20220927_101953073](https://user-images.githubusercontent.com/45207725/192515192-cc9392ba-ff41-497d-b053-7cbe64285019.jpg)
 
 ### Alarm Panel States
