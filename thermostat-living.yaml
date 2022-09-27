@@ -1,0 +1,209 @@
+esphome:
+  name: thermostat-living
+  platform: ESP8266
+  board: d1_mini
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: !secret ap_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: 192.168.0.127
+    gateway: 192.168.0.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Thermostat L Fallback Hotspot"
+    password: !secret ap_password
+
+captive_portal:
+
+
+substitutions:
+  room: Living                                                          # Name of the room thermostat is in
+  entity_heater: switch.heating_switch                                  # entity_id of the heating switch in HA
+  entity_temp: sensor.temperature_sensor_living_ewe_temperature         # entity_id of the temperature sensor in HA
+  entity_alarm: alarm_control_panel.home_alarm                          # entity_id of the alarm control panel in HA
+  entity_brightness_increase: script.increase_brightness_living_room    # entity_id of the script in HA to increase lights brightness
+  entity_brightness_decrease: script.decrease_brightness_living_room    # entity_id of the script in HA to decrease lights brightness
+  default_low: "18.0"                                                   # The default low target temperature for the control algorithm
+                                                                        # This can be dynamically set in the frontend later
+  min_temp: "15.0"                                                      # Minimum temperature able to set
+  max_temp: "25.0"                                                      # Maximum temperature able to set
+  temp_step: "0.5"                                                      # Temperature set step
+  heat_hysteris_control: "0.3"                                          # Heat deadband, see climate thermostat component documentation
+
+climate:
+  - platform: thermostat
+    min_heating_off_time: 0s
+    min_heating_run_time: 0s
+    min_idle_time: 0s
+    visual:
+      min_temperature: ${min_temp}
+      max_temperature: ${max_temp}
+      temperature_step: ${temp_step}
+    name: "${room}"
+    
+    ##THIS BREAKS ALL
+    # preset:
+    #   - name: sleep
+    #     default_target_temperature_low: 16
+    #     mode: heat
+    #   - name: away
+    #     default_target_temperature_low: 18
+    #     mode: heat
+        
+    id: this_thermostat
+    sensor: current_temperature
+    default_mode: heat
+
+    default_target_temperature_low: ${default_low}
+    
+    heat_deadband: ${heat_hysteris_control}
+
+    heat_action:
+      - lambda: id(fire).publish_state(true);
+      - homeassistant.service:
+          service: homeassistant.turn_on
+          data:
+            entity_id: ${entity_heater}
+
+    idle_action:
+      - lambda: id(fire).publish_state(false);
+      - homeassistant.service:
+          service: homeassistant.turn_off
+          data:
+            entity_id: ${entity_heater}
+
+i2c:
+  sda: D1
+  scl: D2
+  frequency: 800kHz
+  
+switch:
+  - platform: template
+    id: brightness
+    optimistic: true
+
+text_sensor:
+  - platform: homeassistant
+    entity_id: ${entity_alarm}
+    id: alarm_state
+
+binary_sensor:
+  - platform: template
+    id: fire
+
+  - platform: gpio
+    id: button
+    pin:
+      number: D4
+      inverted: true
+    on_press:
+      then:
+        - switch.toggle: brightness
+
+sensor:
+  - platform: homeassistant
+    id: current_temperature
+    entity_id: ${entity_temp}
+    
+  - platform: template
+    id: oled_contrast
+
+  - platform: rotary_encoder
+    id: encoder
+    pin_a:
+      number: D6
+      mode: INPUT_PULLUP
+    pin_b:
+      number: D5
+      mode: INPUT_PULLUP
+    on_clockwise:
+      - if:
+          condition:
+            switch.is_on: brightness
+          then:
+            - homeassistant.service:
+                service: homeassistant.turn_on
+                data:
+                    entity_id: ${entity_brightness_increase}
+          else:
+              - climate.control:
+                  id: this_thermostat
+                  mode: HEAT
+                  target_temperature: !lambda "return id(this_thermostat).target_temperature + ${temp_step};"
+
+    on_anticlockwise:
+      then:
+        - if:
+            condition:
+              switch.is_on: brightness
+            then:
+              - homeassistant.service:
+                  service: homeassistant.turn_on
+                  data:
+                    entity_id: ${entity_brightness_decrease}
+            else:
+              - climate.control:
+                  id: this_thermostat
+                  mode: HEAT
+                  target_temperature: !lambda "return id(this_thermostat).target_temperature - ${temp_step};"
+
+display:
+  - platform: ssd1306_i2c
+    id: oled1
+    update_interval: 0.5s
+    model: "SSD1306 128x64"
+    address: 0x3C
+    lambda: |-
+      if (id(fire).state) {id(ani_fire).next_frame(); it.image(0, 0, id(ani_fire));}
+      else {it.image(110, 0, id(home_thermometer));}
+      it.strftime(64, 0, id(font3), TextAlign::TOP_CENTER, "%H:%M", id(esptime).now());
+      
+      it.printf(64, 10, id(font2), TextAlign::CENTER_HORIZONTAL, " %.1f°", id(current_temperature).state);
+      it.printf(64, 64, id(font3), TextAlign::BOTTOM_CENTER, "%.1f°", id(this_thermostat).target_temperature);
+      
+      if (id(alarm_state).state == "disarmed") {it.image(110, 49, id(alarm_disarmed));}
+      if (id(alarm_state).state == "arming") {it.image(0, 49, id(alarm_arming));}
+      if (id(alarm_state).state == "pending") {it.image(0, 49, id(alarm_arming));}
+      if (id(alarm_state).state == "armed_away") {it.image(0, 49, id(alarm_armed));}
+
+animation:
+  - file: "_icons/thermostat/fire.gif"
+    id: ani_fire
+image:
+  - file: "_icons/thermostat/home-thermometer.png"
+    id: home_thermometer
+  - file: "_icons/thermostat/lightbulb-on-outline.png"
+    id: bulb
+  - file: "_icons/thermostat/alarm-disarmed.png"
+    id: alarm_disarmed
+  - file: "_icons/thermostat/lock.png"
+    id: alarm_armed
+  - file: "_icons/thermostat/alarm-arming.png"
+    id: alarm_arming
+
+font:
+  - file: "_fonts/nasalization.ttf"
+    id: font1
+    size: 12
+  - file: "_fonts/refsan.ttf"
+    id: font2
+    size: 35
+  - file: "_fonts/refsan.ttf"
+    id: font3
+    size: 13
+    
+time:
+  - platform: homeassistant
+    id: esptime
