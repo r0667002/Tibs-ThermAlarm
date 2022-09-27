@@ -1,5 +1,5 @@
 # Tibs ThermAlarm
-This repository includes the necessary code and 3D model for the Tibs ThermAlarm. A DIY project combining a thermostat and an alarm panel! The ThermAlarm is meant to be **used with Home Assistant (HA)** and is created using **ESPHome** and **PlatformIO**. Scroll down to see pictures of the final result!
+This repository includes the necessary code and 3D model for the Tibs ThermAlarm. A DIY project combining a thermostat and an alarm panel! The ThermAlarm is meant to be **used with Home Assistant (HA)** and is created using **ESPHome** and **PlatformIO**. Scroll down to see the [final result](#final-result)!
 
 ### Necessary Hardware
 It includes the following components:
@@ -83,11 +83,17 @@ Make sure that you reference to the right script entity_id in the ESPHome config
 ### Front
 ![tibs-thermalarm-front](https://user-images.githubusercontent.com/45207725/192398301-f4d7239a-c979-443a-ac46-957cadabbeb0.jpg)
 ### Alarm Panel States
-#### Disarmed
+#### Disarmed & heating off
+![disarmed](https://user-images.githubusercontent.com/45207725/192407516-bd44bf3e-0bb9-4a27-817c-ff2faf6ba45d.jpg)
+
+#### Disarmed & heating on
+![heating](https://user-images.githubusercontent.com/45207725/192407533-6d4645a0-640e-4655-afb1-bb180df1a270.jpg)
 
 #### Arming
+![pending](https://user-images.githubusercontent.com/45207725/192407557-42091be3-69f1-462f-9cd1-bf696e8f9860.jpg)
 
 #### Armed
+![armed](https://user-images.githubusercontent.com/45207725/192407702-f562b16b-eb7d-45ed-883a-226eef167815.jpg)
 
 ### Wiring
 ![tibs-thermalarm-wiring](https://user-images.githubusercontent.com/45207725/192398211-86e45e32-7fc2-43e4-942f-7c82de3798de.png)
