@@ -29,7 +29,21 @@ The D1 mini itself is powered by a regular 5V adapter plugged into the wall.
 
 ## ESPHome configuration
 The only code you have to adapt to make this work with your system can be found in the substitutions section.
-![image](https://user-images.githubusercontent.com/45207725/192402240-46fa9945-2c35-42fb-b3c5-a1ffe32b8f3f.png)
+```
+substitutions:
+  room: Living                                                          # Name of the room thermostat is in
+  entity_heater: switch.heating_switch                                  # entity_id of the heating switch in HA
+  entity_temp: sensor.temperature_sensor_living_ewe_temperature         # entity_id of the temperature sensor in HA
+  entity_alarm: alarm_control_panel.home_alarm                          # entity_id of the alarm control panel in HA
+  entity_brightness_increase: script.increase_brightness_living_room    # entity_id of the script in HA to increase lights brightness
+  entity_brightness_decrease: script.decrease_brightness_living_room    # entity_id of the script in HA to decrease lights brightness
+  default_low: "18.0"                                                   # The default low target temperature for the control algorithm.
+                                                                        # This can be dynamically set in the frontend later.
+  min_temp: "15.0"                                                      # Minimum temperature able to set
+  max_temp: "25.0"                                                      # Maximum temperature able to set
+  temp_step: "0.5"                                                      # Temperature set step
+  heat_hysteris_control: "0.3"                                          # Heat deadband, see climate thermostat component documentation
+  ```
 
 ## HA configuration
 The only code you have to adapt to make this work with your system can be found in the scripts. Change the light to your own light entity_id.
