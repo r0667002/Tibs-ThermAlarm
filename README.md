@@ -1,6 +1,7 @@
 # Tibs ThermAlarm
 This repository includes the necessary code and 3D model for the Tibs ThermAlarm. A DIY project combining a thermostat and an alarm panel! The ThermAlarm is meant to be **used with Home Assistant (HA)** and is created using **ESPHome** and **PlatformIO**.
 
+### Necessary Hardware
 It includes the following components:
 - 1x 4x4 matrix keypad
 - 1x 0.96 OLED display SSD1306 128x64
@@ -13,7 +14,7 @@ It needs the following components already integrated in HA:
 - Temperature sensor
 - Switch to control central heating system
 
-## Usage
+### Usage
 The goal of the project is to make a DIY thermostat and alarm panel in one. It is heavily inspired by [HASS-YAAP](https://github.com/paviro/HASS-YAAP) and [3ative's thermostat](https://github.com/3ative/thermostat-project-v3). The code for the alarm panel is identical to the original project, but instead of connecting it to an external display, the code runs headless. The OLED display indicates the alarm state, but does not show when a code is being entered.
 
 The **alarm panel** uses MQTT to control an alarm created within HA. Check out the original project for an in-dept description. The way it's being used here is simply to arm and disarm the alarm. Additionally it can turn on/off lights in the house.
