@@ -45,6 +45,7 @@ substitutions:
   temp_step: "0.5"                                                      # Temperature set step
   heat_hysteris_control: "0.3"                                          # Heat deadband, see climate thermostat component documentation
   ```
+Don't forget to place the `_icons` and `_fonts` folders in the config/esphome folder e.g. by using Samba.
 
 ## HA configuration
 Add the following scripts to HA and change the `light.staanlamp` to your own light entity_id.
@@ -71,7 +72,6 @@ sequence:
       brightness_step_pct: -10
     target:
       entity_id:
-        - light.lamp_tv
         - light.staanlamp
 mode: single
 icon: mdi:lamps
@@ -79,7 +79,16 @@ icon: mdi:lamps
 Make sure that you reference to the right script entity_id in the ESPHome configuration.
 
 ## Final Result
+### Front
 ![tibs-thermalarm-front](https://user-images.githubusercontent.com/45207725/192398301-f4d7239a-c979-443a-ac46-957cadabbeb0.jpg)
+### Alarm Panel States
+#### Disarmed
+
+#### Arming
+
+#### Armed
+
+### Wiring
 ![tibs-thermalarm-wiring](https://user-images.githubusercontent.com/45207725/192398211-86e45e32-7fc2-43e4-942f-7c82de3798de.png)
 
 ## Credits
