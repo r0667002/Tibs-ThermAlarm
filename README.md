@@ -44,7 +44,8 @@ substitutions:
   min_temp: "15.0"                                                      # Minimum temperature able to set
   max_temp: "25.0"                                                      # Maximum temperature able to set
   temp_step: "0.5"                                                      # Temperature set step
-  heat_hysteris_control: "0.3"                                          # Heat deadband, see climate thermostat component documentation
+  heat_hysteresis_deadband: "0.3"                                       # Heat deadband, see climate thermostat component documentation
+  heat_hysteresis_overrun: "0.1"                                        # Heat overrun,  see climate thermostat component documentation
   ```
 Don't forget to place the `_icons` and `_fonts` folders in the config/esphome folder e.g. by using Samba.
 
