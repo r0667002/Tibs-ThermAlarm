@@ -16,7 +16,7 @@ It needs the following components already integrated in HA:
 - Optional: Dimmable lights
 
 ### Usage
-The goal of the project is to make a DIY thermostat and alarm panel in one. It is heavily inspired by [HASS-YAAP](https://github.com/paviro/HASS-YAAP) and [3ative's thermostat](https://github.com/3ative/thermostat-project-v3). The code for the alarm panel is identical to the original project, but instead of connecting it to an external display, the code runs headless. The OLED display indicates the alarm state, but does not show when a code is being entered.
+The goal of the project is to make a DIY thermostat and alarm panel in one. It is heavily inspired by [paviro's HASS-YAAP](https://github.com/paviro/HASS-YAAP) and [3ative's thermostat](https://github.com/3ative/thermostat-project-v3). The code for the alarm panel is identical to the original project, but instead of connecting it to an external display, the code runs headless. The OLED display indicates the alarm state, but does not show when a code is being entered.
 
 The **alarm panel** uses MQTT to control an alarm created within HA. Check out the original project for an in-dept description of the usage. The way it's being used here is simply to arm and disarm the alarm. Additionally it can turn on/off lights in the house if they are integrated in HA.
 
