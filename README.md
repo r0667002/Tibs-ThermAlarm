@@ -37,8 +37,8 @@ substitutions:
   entity_alarm: alarm_control_panel.home_alarm                          # entity_id of the alarm control panel in HA
   entity_brightness_increase: script.increase_brightness_living_room    # entity_id of the script in HA to increase lights brightness
   entity_brightness_decrease: script.decrease_brightness_living_room    # entity_id of the script in HA to decrease lights brightness
-  default_low: "18.0"                                                   # The default low target temperature for the control algorithm.
-                                                                        # This can be dynamically set in the frontend later.
+  default_low: "18.0"                                                   # The default low target temperature for the control algorithm
+                                                                        # This can be dynamically set in the frontend later
   min_temp: "15.0"                                                      # Minimum temperature able to set
   max_temp: "25.0"                                                      # Maximum temperature able to set
   temp_step: "0.5"                                                      # Temperature set step
