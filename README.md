@@ -44,7 +44,8 @@ substitutions:
   min_temp: "15.0"                                                      # Minimum temperature able to set
   max_temp: "25.0"                                                      # Maximum temperature able to set
   temp_step: "0.5"                                                      # Temperature set step
-  heat_hysteris_control: "0.3"                                          # Heat deadband, see climate thermostat component documentation
+  heat_hysteresis_deadband: "0.3"                                       # Heat deadband, see climate thermostat component documentation
+  heat_hysteresis_overrun: "0.1"                                        # Heat overrun,  see climate thermostat component documentation
   ```
 Don't forget to place the `_icons` and `_fonts` folders in the config/esphome folder e.g. by using Samba.
 
@@ -84,7 +85,11 @@ If you just want to use the thermostat without the alarm panel, an stl file is i
 
 ## Final Result
 ### Front
-![tibs-thermalarm-front](https://user-images.githubusercontent.com/45207725/192398301-f4d7239a-c979-443a-ac46-957cadabbeb0.jpg)
+![PXL_20220927_102025196](https://user-images.githubusercontent.com/45207725/192515153-09560e5b-a001-459a-b3b2-ef0a87bf24d6.jpg)
+![PXL_20220927_102140844](https://user-images.githubusercontent.com/45207725/192515177-5636916c-e635-4605-b198-86ba091cd7f3.jpg)
+![IMG_20220927_122309](https://user-images.githubusercontent.com/45207725/192515188-85183305-17e4-4bf2-8464-220cc6d9d71e.jpg)
+![PXL_20220927_101953073](https://user-images.githubusercontent.com/45207725/192515192-cc9392ba-ff41-497d-b053-7cbe64285019.jpg)
+
 ### Alarm Panel States
 #### Disarmed & heating off
 ![disarmed](https://user-images.githubusercontent.com/45207725/192407516-bd44bf3e-0bb9-4a27-817c-ff2faf6ba45d.jpg)
@@ -104,6 +109,6 @@ If you just want to use the thermostat without the alarm panel, an stl file is i
 ## Credits
 
 - The [3D model for the rotary encoder knob](https://www.thingiverse.com/thing:1283248) is from Thingiverse user tardomatic.
-- The [3D model for the OLED display holder](https://www.thingiverse.com/thing:2157801/files) integrated in the 3D model is from Thingiverse user Nan_1.
+- The [3D model for the OLED display holder](https://www.thingiverse.com/thing:2157801/files) integrated in the thermostat replacement 3D models is from Thingiverse user Nan_1.
 - [The alarm panel code](https://github.com/paviro/HASS-YAAP) is by GitHub user [@paviro](https://github.com/paviro).
 - The ESPHome code for the thermostat is inspired by [Thermostat Project V3](https://github.com/3ative/thermostat-project-v3) by GitHub user [@3ative](https://github.com/3ative).
