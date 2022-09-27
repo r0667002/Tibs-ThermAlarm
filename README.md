@@ -79,6 +79,9 @@ icon: mdi:lamps
 ```
 Make sure that you reference to the right script entity_id in the ESPHome configuration.
 
+## Tibs Thermostat
+If you just want to use the thermostat without the alarm panel, an stl file is included without the keypad cutout.
+
 ## Final Result
 ### Front
 ![tibs-thermalarm-front](https://user-images.githubusercontent.com/45207725/192398301-f4d7239a-c979-443a-ac46-957cadabbeb0.jpg)
