@@ -17,7 +17,7 @@ It needs the following components already integrated in HA:
 ### Usage
 The goal of the project is to make a DIY thermostat and alarm panel in one. It is heavily inspired by [HASS-YAAP](https://github.com/paviro/HASS-YAAP) and [3ative's thermostat](https://github.com/3ative/thermostat-project-v3). The code for the alarm panel is identical to the original project, but instead of connecting it to an external display, the code runs headless. The OLED display indicates the alarm state, but does not show when a code is being entered.
 
-The **alarm panel** uses MQTT to control an alarm created within HA. Check out the original project for an in-dept description. The way it's being used here is simply to arm and disarm the alarm. Additionally it can turn on/off lights in the house.
+The **alarm panel** uses MQTT to control an alarm created within HA. Check out the original project for an in-dept description of the usage. The way it's being used here is simply to arm and disarm the alarm. Additionally it can turn on/off lights in the house if they are integrated in HA.
 
 The **thermostat** is used to control a simple central heating system (on/off). Note that the control for the thermostat is performed by an external switch, also integrated in HA. It is also only used for heating, not for cooling. Additionally it can in/decrease brightness of lights in the house if they are integrated in HA.
 
@@ -47,7 +47,36 @@ substitutions:
   ```
 
 ## HA configuration
-The only code you have to adapt to make this work with your system can be found in the scripts. Change the light to your own light entity_id.
+Add the following scripts to HA and change the `light.staanlamp` to your own light entity_id.
+
+### Increase brightness
+```
+alias: "Lights: Increase brightness - Living Room"
+sequence:
+  - service: light.turn_on
+    data:
+      brightness_step_pct: 10
+    target:
+      entity_id:
+        - light.staanlamp
+mode: single
+icon: mdi:lamps
+```
+### Decrease brightness
+```
+alias: "Lights: Decrease brightness - Living Room"
+sequence:
+  - service: light.turn_on
+    data:
+      brightness_step_pct: -10
+    target:
+      entity_id:
+        - light.lamp_tv
+        - light.staanlamp
+mode: single
+icon: mdi:lamps
+```
+Make sure that you reference to the right script entity_id in the ESPHome configuration.
 
 ## Final Result
 ![tibs-thermalarm-front](https://user-images.githubusercontent.com/45207725/192398301-f4d7239a-c979-443a-ac46-957cadabbeb0.jpg)
