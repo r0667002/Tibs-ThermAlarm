@@ -84,6 +84,8 @@ Make sure that you reference to the right script entity_id in the ESPHome config
 If you just want to use the thermostat without the alarm panel, an stl file is included without the keypad cutout.
 
 ## Final Result
+
+A [demo video](https://www.reddit.com/r/Esphome/comments/xpxfy0/i_built_a_diy_thermostat_alarm_panel_in_one/?utm_source=share&utm_medium=web2x&context=3) can be found on reddit.
 ### Front
 ![IMG_20220927_122309](https://user-images.githubusercontent.com/45207725/192515188-85183305-17e4-4bf2-8464-220cc6d9d71e.jpg)
 ![PXL_20220927_102025196](https://user-images.githubusercontent.com/45207725/192515153-09560e5b-a001-459a-b3b2-ef0a87bf24d6.jpg)
