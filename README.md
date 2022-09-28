@@ -110,7 +110,7 @@ A [demo video](https://www.reddit.com/r/Esphome/comments/xpxfy0/i_built_a_diy_th
 
 ## Credits
 
-- The [3D model for the rotary encoder knob](https://www.thingiverse.com/thing:1283248) is from Thingiverse user tardomatic.
+- The [3D model for the rotary encoder knob](https://www.thingiverse.com/thing:2549137/files) is from Thingiverse user tardomatic.
 - The [3D model for the OLED display holder](https://www.thingiverse.com/thing:2157801/files) integrated in the thermostat replacement 3D models is from Thingiverse user Nan_1.
 - [The alarm panel code](https://github.com/paviro/HASS-YAAP) is by GitHub user [@paviro](https://github.com/paviro).
 - The ESPHome code for the thermostat is inspired by [Thermostat Project V3](https://github.com/3ative/thermostat-project-v3) by GitHub user [@3ative](https://github.com/3ative).
