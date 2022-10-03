@@ -14,11 +14,12 @@ It needs the following components already integrated in HA:
 - Temperature sensor
 - Switch to control central heating system
 - Optional: Dimmable lights
+- Optional: Alarm
 
 ### Usage
-The goal of the project is to make a DIY thermostat and alarm panel in one. It is heavily inspired by [paviro's HASS-YAAP](https://github.com/paviro/HASS-YAAP) and [3ative's thermostat](https://github.com/3ative/thermostat-project-v3). The code for the alarm panel used here is identical to the original project, but instead of connecting it to an external display, the code runs headless. The OLED display indicates the alarm state, but does not show when a code is being entered.
+The goal of the project is to make a DIY thermostat and alarm panel in one. It is heavily inspired by [paviro's HASS-YAAP](https://github.com/paviro/HASS-YAAP) and [3ative's thermostat](https://github.com/3ative/thermostat-project-v3). The code for the alarm panel used here is identical to the original project, but instead of connecting it to an external display directly, the code runs "headless" and HA controls the OLED display instead. The OLED display indicates the alarm state, but does not show when a code is being entered.
 
-The **alarm panel** uses MQTT to control an alarm created within HA. Check out the original project for an in-dept description of the usage. The way it's being used here is simply to arm and disarm the alarm. Additionally it can turn on/off lights in the house if they are integrated in HA.
+The **alarm panel** uses MQTT to control an alarm created within HA. Check out the original project for an in-dept description of the usage. The way it's being used here is simply to arm and disarm the alarm. The time until the alarm is armed/triggered is shown on the display too. Additionally it can turn on/off lights in the house if they are integrated in HA.
 
 The **thermostat** is used to control a simple central heating system (on/off). Note that the control for the thermostat is performed by an external switch, also integrated in HA. It is also only used for heating, not for cooling. Additionally it can in/decrease brightness of lights in the house if they are integrated in HA.
 
