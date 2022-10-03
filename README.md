@@ -217,7 +217,7 @@ action:
 mode: single
 hide_entity: true
 ```
-Now the current temperature will be replaced everytime your alarm is pending or arming by a timer that counts until the alarm is armed or triggered. Cancelling the action will also cancel the timer and shows the temperature again on the display.
+Now the current temperature will be replaced when your alarm is pending or arming by a timer showing how much time is left until arm or trigger. Cancelling the action will also cancel the timer and shows the temperature again on the display.
 
 ## Tibs Thermostat
 If you just want to use the thermostat without the alarm panel, an stl file is included without the keypad cutout.
