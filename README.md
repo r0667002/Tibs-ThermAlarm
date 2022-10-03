@@ -39,6 +39,8 @@ substitutions:
   entity_alarm: alarm_control_panel.home_alarm                          # entity_id of the alarm control panel in HA
   entity_brightness_increase: script.increase_brightness_living_room    # entity_id of the script in HA to increase lights brightness
   entity_brightness_decrease: script.decrease_brightness_living_room    # entity_id of the script in HA to decrease lights brightness
+  entity_timer_alarm_arming: sensor.timer_arming_remaining              # entity_id of the sensor in HA of alarm arming
+  entity_timer_alarm_pending: sensor.timer_pending_remaining            # entity_id of the sensor in HA of alarm pending
   default_low: "18.0"                                                   # The default low target temperature for the control algorithm
                                                                         # This can be dynamically set in the frontend later
   min_temp: "15.0"                                                      # Minimum temperature able to set
@@ -79,6 +81,143 @@ mode: single
 icon: mdi:lamps
 ```
 Make sure that you reference to the right script entity_id in the ESPHome configuration.
+
+### Alarm Timer on Display
+To add a timer that shows the time until your alarm is armed and the time until it is triggered, you need a few things.
+
+Start by adding two timers with your chosen duration to HA as helpers. Let's call the timer until armed `timer.alarm_arming` and the timer until trigger `timer.alarm_timer`.
+Then add the following automations, making sure to replace the entity_id's with your own:
+
+To start the timers when the alarm is arming/pending:
+```
+alias: "Alarm: Timer starts Alarm Arming"
+description: Start timer that tells when alarm will be armed.
+trigger:
+  - platform: state
+    entity_id: alarm_control_panel.home_alarm
+    to: arming
+condition: []
+action:
+  - service: timer.start
+    data:
+      duration: "0"
+    target:
+      entity_id: timer.alarm_arming
+mode: single
+```
+```
+alias: "Alarm: Timer starts Alarm Pending"
+description: Start timer that tells when alarm will go off.
+trigger:
+  - platform: state
+    entity_id: alarm_control_panel.home_alarm
+    to: pending
+condition: []
+action:
+  - service: timer.start
+    data: {}
+    entity_id: timer.alarm_timer
+mode: single
+```
+To cancel the timers when the trigger/arm is cancelled:
+```
+alias: "Alarm: Cancel arming timer"
+description: Cancel timer that tells when alarm will be armed.
+trigger:
+  - platform: state
+    entity_id:
+      - alarm_control_panel.home_alarm
+    from: arming
+    to: disarmed
+condition: []
+action:
+  - service: timer.cancel
+    data: {}
+    target:
+      entity_id: timer.alarm_arming
+mode: single
+```
+```
+alias: "Alarm: Cancel trigger timer"
+description: Cancel timer that tells when alarm will go off.
+trigger:
+  - platform: state
+    entity_id:
+      - alarm_control_panel.home_alarm
+    from: pending
+    to: disarmed
+condition: []
+action:
+  - service: timer.cancel
+    data: {}
+    target:
+      entity_id: timer.alarm_timer
+mode: single
+```
+Because HA does not natively show the remaining time on a timer, you also need to add the following sensors to your configuration.yaml:
+```
+sensor:
+  - platform: template
+    sensors:
+      timer_arming_remaining:
+        friendly_name: 'Timer Arming Remaining'
+        value_template: >-
+          {% set f = state_attr('timer.alarm_arming', 'finishes_at') %}
+          {{ '00:00' if f == None else 
+            (as_datetime(f) - now()).total_seconds() | timestamp_custom('%M:%S', false) }}
+      timer_pending_remaining:
+        friendly_name: 'Timer Pending Remaining'
+        value_template: >-
+          {% set f = state_attr('timer.alarm_timer', 'finishes_at') %}
+          {{ '00:00' if f == None else 
+            (as_datetime(f) - now()).total_seconds() | timestamp_custom('%M:%S', false) }}
+```            
+Then finally, you need to add two more automations to update the remaining time sensors, as this is not done automatically:
+```
+alias: "Alarm: Update Timer Arming Remaining"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - timer.alarm_arming
+    to: active
+  - platform: time_pattern
+    seconds: /1
+condition:
+  - condition: state
+    entity_id: timer.alarm_arming
+    state: active
+action:
+  - service: homeassistant.update_entity
+    data: {}
+    target:
+      entity_id: sensor.timer_arming_remaining
+mode: single
+hide_entity: true
+```
+```
+alias: "Alarm: Update Timer Pending Remaining"
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - timer.alarm_timer
+    to: active
+  - platform: time_pattern
+    seconds: /1
+condition:
+  - condition: state
+    entity_id: timer.alarm_timer
+    state: active
+action:
+  - service: homeassistant.update_entity
+    data: {}
+    target:
+      entity_id: sensor.timer_pending_remaining
+mode: single
+hide_entity: true
+```
+Now the current temperature will be replaced everytime your alarm is pending or arming by a timer that counts until the alarm is armed or triggered. Cancelling the action will also cancel the timer and shows the temperature again on the display.
 
 ## Tibs Thermostat
 If you just want to use the thermostat without the alarm panel, an stl file is included without the keypad cutout.
