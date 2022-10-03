@@ -35,13 +35,15 @@ substitutions:
   entity_alarm: alarm_control_panel.home_alarm                          # entity_id of the alarm control panel in HA
   entity_brightness_increase: script.increase_brightness_living_room    # entity_id of the script in HA to increase lights brightness
   entity_brightness_decrease: script.decrease_brightness_living_room    # entity_id of the script in HA to decrease lights brightness
+  entity_timer_alarm_arming: sensor.timer_arming_remaining              # entity_id of the sensor in HA of alarm arming
+  entity_timer_alarm_pending: sensor.timer_pending_remaining            # entity_id of the sensor in HA of alarm pending
   default_low: "18.0"                                                   # The default low target temperature for the control algorithm
                                                                         # This can be dynamically set in the frontend later
   min_temp: "15.0"                                                      # Minimum temperature able to set
   max_temp: "25.0"                                                      # Maximum temperature able to set
   temp_step: "0.5"                                                      # Temperature set step
   heat_hysteresis_deadband: "0.3"                                       # Heat deadband, see climate thermostat component documentation
-  heat_hysteresis_overrun: "0.1"                                        # Heat overrun, see climate thermostat component documentation
+  heat_hysteresis_overrun: "0.1"                                        # Heat overrun,  see climate thermostat component documentation
 
 climate:
   - platform: thermostat
@@ -51,7 +53,7 @@ climate:
     visual:
       min_temperature: ${min_temp}
       max_temperature: ${max_temp}
-      temperature_step: ${temp_step}
+      temperature_step: 0.1
     name: "${room}"
     
     ##THIS BREAKS ALL
@@ -100,6 +102,14 @@ text_sensor:
   - platform: homeassistant
     entity_id: ${entity_alarm}
     id: alarm_state
+
+  - platform: homeassistant
+    entity_id: ${entity_timer_alarm_arming}
+    id: timer_arming
+
+  - platform: homeassistant
+    entity_id: ${entity_timer_alarm_pending}
+    id: timer_pending
 
 binary_sensor:
   - platform: template
@@ -172,11 +182,16 @@ display:
       else {it.image(110, 0, id(home_thermometer));}
       it.strftime(64, 0, id(font3), TextAlign::TOP_CENTER, "%H:%M", id(esptime).now());
       
-      it.printf(64, 10, id(font2), TextAlign::CENTER_HORIZONTAL, " %.1f°", id(current_temperature).state);
+      if (id(alarm_state).state == "disarmed") {it.printf(64, 10, id(font2), TextAlign::CENTER_HORIZONTAL, " %.1f°", id(current_temperature).state);}
+      if (id(alarm_state).state == "armed_away") {it.printf(64, 10, id(font2), TextAlign::CENTER_HORIZONTAL, " %.1f°", id(current_temperature).state);}
+
+      if (id(alarm_state).state == "arming") {it.printf(64, 10, id(font4), TextAlign::CENTER_HORIZONTAL, id(timer_arming).state.c_str());}
+      if (id(alarm_state).state == "pending") {it.printf(64, 10, id(font4), TextAlign::CENTER_HORIZONTAL, id(timer_pending).state.c_str());}
+
       it.printf(64, 64, id(font3), TextAlign::BOTTOM_CENTER, "%.1f°", id(this_thermostat).target_temperature);
       
       if (id(alarm_state).state == "disarmed") {it.image(110, 49, id(alarm_disarmed));}
-      if (id(alarm_state).state == "arming") {it.image(0, 49, id(alarm_arming));}
+      if (id(alarm_state).state == "arming") {it.image(0, 49, id(alarm_arming));}      
       if (id(alarm_state).state == "pending") {it.image(0, 49, id(alarm_arming));}
       if (id(alarm_state).state == "armed_away") {it.image(0, 49, id(alarm_armed));}
 
@@ -202,6 +217,9 @@ font:
   - file: "_fonts/refsan.ttf"
     id: font2
     size: 35
+  - file: "_fonts/refsan.ttf"
+    id: font4
+    size: 30
   - file: "_fonts/refsan.ttf"
     id: font3
     size: 13
