@@ -240,8 +240,7 @@ A [demo video](https://www.reddit.com/r/Esphome/comments/xpxfy0/i_built_a_diy_th
 ![heating](https://user-images.githubusercontent.com/45207725/192407533-6d4645a0-640e-4655-afb1-bb180df1a270.jpg)
 
 #### Arming/Pending
-![arming](https://user-images.githubusercontent.com/45207725/193625940-bd77aab1-f2b7-4001-8220-4fb1ac214e45.jpg)
-
+![arming](https://user-images.githubusercontent.com/45207725/193628321-3d79f8ea-2423-4eed-ae6f-aaacb7652139.jpg)
 
 #### Armed
 ![armed](https://user-images.githubusercontent.com/45207725/192407702-f562b16b-eb7d-45ed-883a-226eef167815.jpg)
